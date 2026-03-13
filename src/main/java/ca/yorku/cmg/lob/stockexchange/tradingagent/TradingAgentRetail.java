@@ -5,12 +5,12 @@ import ca.yorku.cmg.lob.stockexchange.events.NewsBoard;
 import ca.yorku.cmg.lob.trader.Trader;
 
 /**
- * Legacy conservative agent preserved for compatibility. Internally delegates to a {@link ConservativeTradingStrategy}.
+ * Trading agent representing a retail trader.
  */
-public class TradingAgentConservative extends TradingAgent {
+public class TradingAgentRetail extends TradingAgent {
 
-	public TradingAgentConservative(Trader t, StockExchange e, NewsBoard n) {
-		super(t, e, n, new ConservativeTradingStrategy(t, e));
+	public TradingAgentRetail(Trader t, StockExchange e, NewsBoard n, ITradingStrategy strategy) {
+		super(t, e, n, strategy);
 	}
 
 	@Override
@@ -20,3 +20,4 @@ public class TradingAgentConservative extends TradingAgent {
 		}
 	}
 }
+
