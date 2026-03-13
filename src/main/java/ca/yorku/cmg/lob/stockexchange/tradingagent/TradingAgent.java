@@ -8,21 +8,27 @@ import ca.yorku.cmg.lob.trader.Trader;
 /**
  * An trading agent that receives news and reacts by submitting ask or bid orders.
  */
-public abstract class TradingAgent {
+public abstract class TradingAgent implements INewsObserver {
 	protected Trader t;
 	protected StockExchange exc;
 	protected NewsBoard news;
+	protected ITradingStrategy strategy;
 	
 	/**
 	 * Constructor
 	 * @param t The {@linkplain Trader} object associated with the agent.
 	 * @param e The {@linkplain StockExchange} object at which the agent has an account and trades in. 
 	 * @param n The {@linkplain NewsBoard} object that generates news events.
+	 * @param strategy The {@linkplain ITradingStrategy} that determines how this agent reacts to events.
 	 */
-	public TradingAgent(Trader t, StockExchange e, NewsBoard n) {
+	public TradingAgent(Trader t, StockExchange e, NewsBoard n, ITradingStrategy strategy) {
 		this.t=t;
 		this.exc = e;
 		this.news = n;
+		this.strategy = strategy;
+		if (this.news != null) {
+			this.news.registerObserver(this);
+		}
 	}
 	
 	/**
@@ -41,6 +47,13 @@ public abstract class TradingAgent {
 		int positionInSecurity = exc.getAccounts().getTraderAccount(t).getPosition(e.getSecrity().getTicker());
 		if (positionInSecurity > 0) {
 			actOnEvent(e,positionInSecurity,exc.getPrice(e.getSecrity().getTicker()));
+		}
+	}
+
+	@Override
+	public void update(Event e) {
+		if (e != null) {
+			examineEvent(e);
 		}
 	}
 
