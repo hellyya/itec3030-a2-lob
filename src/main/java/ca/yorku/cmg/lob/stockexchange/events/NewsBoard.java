@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
+import ca.yorku.cmg.lob.stockexchange.tradingagent.INewsObserver;
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.yorku.cmg.lob.security.Security;
 import ca.yorku.cmg.lob.security.SecurityList;
@@ -112,13 +115,23 @@ public class NewsBoard {
 	}
 	
 	
-	/**
-	 * Stub for the observer part. Runs the entire queue of events and sends notifications to registered trading agents.   
-	 */
-	public void runEventsList() {
-
+		/**
+		 * Stub for the observer part. Runs the entire queue of events and sends notifications to registered trading agents.   
+		 */
+		public void runEventsList() {
+		// We process events until the queue is empty
+		while (!eventQueue.isEmpty()) {
+			Event currentEvent = eventQueue.poll();
+			
+			// Notify all registered TradingAgents (Observers)
+			for (INewsObserver observer : observers) {
+				observer.update(currentEvent);
+			}
+		}
 	}
-	
-	
-	
+
+		private List<INewsObserver> observers = new ArrayList<>();
+		public void registerObserver(INewsObserver o) {
+		observers.add(o);
+	}
 }
