@@ -1,3 +1,25 @@
+# YorkStockSim: News-Driven Trading Agents
+
+**My implementation (ITEC 3030, York University).** This repo extends a stock exchange simulator so that trading agents buy and sell in response to company news. I implemented the design with three classic object-oriented patterns:
+
+| Pattern | Where | What it does |
+|---|---|---|
+| **Observer** | `events/NewsBoard`, `tradingagent/INewsObserver` | Trading agents register with the `NewsBoard`. `runEventsList()` processes the event queue and notifies every registered agent of each `GoodNews` / `BadNews` event. |
+| **Strategy** | `strategy/ITradingStrategy`, `AggressiveStrategy`, `ConservativeStrategy` | How an agent reacts to news is a pluggable strategy, not hard-coded in subclasses. On good news, an aggressive agent bids for more shares; on bad news, it sells its position. |
+| **Factory** | `tradingagent/TradingAgentFactory` | `StockExchange` asks the factory for an agent by **type** (`Retail` / `Institutional`) and **style** (`Aggressive` / `Conservative`), so new agent types or strategies can be added without changing the exchange. |
+
+I also added the `TradingAgentRetail` and `TradingAgentInstitutional` agent types, and replaced the `if/else` agent construction in `StockExchange` with the factory.
+
+**Tech:** Java, Maven, JUnit 5
+
+```bash
+mvn test
+```
+
+---
+
+*The original assignment description follows.*
+
 # YorkStockSim
 
 ## Trading Agents and News Desk

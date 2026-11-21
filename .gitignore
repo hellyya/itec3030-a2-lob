@@ -1,1 +1,5 @@
 /target/
+
+.DS_Store
+target/
+/itec3030-a2-lob/
